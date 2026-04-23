@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 let nextId = 1
 
 export default function App() {
-  const [tasks, setTasks] = useState([])
+
+  // 🔽ここ変更
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+  })
+
   const [input, setInput] = useState('')
+
+  // 🔽これ追加
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks])
 
   function addTask() {
     const text = input.trim()
